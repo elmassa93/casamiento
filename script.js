@@ -86,6 +86,7 @@ async function addGift() {
 
 // Toggle gift completion
 async function toggleComplete(element, giftId) {
+    console.log(giftId);
     try {
         console.log(giftId);
         const response = await fetch(`${API_URL}/ToggleRegaloTachado`, {
