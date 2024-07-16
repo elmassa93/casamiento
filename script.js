@@ -26,6 +26,7 @@ function renderGiftList(giftList) {
     giftListContainer.innerHTML = '';
 
     giftList.forEach(gift => {
+        console.log(gift);
         const giftItem = document.createElement('div');
         giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
         giftItem.innerHTML = `
