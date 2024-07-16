@@ -1,5 +1,8 @@
 const API_URL = 'https://www.vidriera.online/Home';
 
+
+console.log('here');
+
 // Fetch and display the gift list
 async function fetchGiftList() {
     try {
