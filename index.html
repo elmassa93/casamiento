@@ -225,7 +225,7 @@
 
             // Ensure link has a protocol
             link = ensureProtocol(link);
-
+            console.log(link);
             if (name && link && isValidURL(link)) {
                 try {
                     const response = await fetch(`${API_URL}/AddRegalo?nombre=${encodeURIComponent(name)}&url=${encodeURIComponent(link)}&imageurl=${encodeURIComponent(image)}`);
