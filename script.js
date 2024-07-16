@@ -1,120 +1,107 @@
-function toggleRSVPModal() {
-    const rsvpModal = new bootstrap.Modal(document.getElementById('rsvpModal'));
-    rsvpModal.show();
+const API_URL = 'https://www.vidriera.online/Home';
 
-    // Add event listener to focus on the input when the modal is fully shown
-    document.getElementById('rsvpModal').addEventListener('shown.bs.modal', function () {
-        const rsvpNameInput = document.getElementById('rsvpName');
-        rsvpNameInput.focus();
+// Fetch and display the gift list
+async function fetchGiftList() {
+    try {
+        const response = await fetch(`${API_URL}/GetRegalos`);
+        const giftList = await response.json();
+        renderGiftList(giftList);
+    } catch (error) {
+        console.error('Error fetching gift list:', error);
+    }
+}
+
+// Render the gift list
+function renderGiftList(giftList) {
+    const giftListContainer = document.getElementById('giftList');
+    giftListContainer.innerHTML = '';
+
+    giftList.forEach(gift => {
+        const giftItem = document.createElement('div');
+        giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
+        giftItem.innerHTML = `
+            <div class="gift-content">
+                <a href="${gift.url}" target="_blank">
+                    <img src="${gift.image || 'default-image.jpg'}" alt="${gift.nombre}">
+                    <p>${gift.nombre}</p>
+                </a>
+                <i class="bi ${gift.tachado ? 'bi-check-square' : 'bi-square'}" onclick="toggleComplete(this, ${gift.regaloId})"></i>
+            </div>
+        `;
+        giftListContainer.appendChild(giftItem);
     });
-
-    // Add event listener to submit on Enter key press
-    document.getElementById('rsvpName').addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            confirmRSVP();
-        }
-    });
 }
 
-function confirmRSVP() {
-    const name = document.getElementById('rsvpName').value;
-
-    if (name) {
-        const rsvpModal = bootstrap.Modal.getInstance(document.getElementById('rsvpModal'));
-        rsvpModal.hide();
-        showThankYouAlert(name);
-    } else {
-        alert('Por favor ingresa tu nombre.');
-    }
-}
-
-function showThankYouAlert(name) {
-
-    const thankYouAlertLabel = document.getElementById('thankYouAlertLabel');
-    if (name.includes(',')) {
-        thankYouAlertLabel.innerHTML = '¡Gracias por confirmar! Los esperamos en diciembre';
-    } else {
-        thankYouAlertLabel.innerHTML = '¡Gracias por confirmar! Te esperamos en diciembre';
-    }
-
-    const thankYouAlert = new bootstrap.Modal(document.getElementById('thankYouAlert'));
-    thankYouAlert.show();
-
-    setTimeout(() => {
-        thankYouAlert.hide();
-    }, 5000); // Alert will disappear after 3 seconds
-}
-
-
-
-function toggleComplete(element) {
-    const giftItem = element.closest('.gift-item');
-    const giftList = giftItem.parentElement;
-    const isCompleted = giftItem.classList.toggle('completed');
-
-    if (isCompleted) {
-        element.classList.replace('bi-square', 'bi-check-square');
-
-        const lastItem = giftList.lastElementChild;
-        const lastItemRect = lastItem.getBoundingClientRect();
-        const giftItemRect = giftItem.getBoundingClientRect();
-        const distance = lastItemRect.top - giftItemRect.top + lastItemRect.height;
-
-        giftItem.classList.add('moving');
-        giftItem.style.transform = `translateY(${distance}px)`;
-
-        setTimeout(() => {
-            giftItem.classList.remove('moving');
-            giftItem.style.transform = '';
-            giftItem.classList.add('hidden');
-
-            giftList.appendChild(giftItem);
-            giftItem.classList.remove('hidden');
-        }, 1000);
-    } else {
-        element.classList.replace('bi-check-square', 'bi-square');
-        giftItem.classList.remove('completed');
-        giftList.insertBefore(giftItem, giftList.firstChild);
-    }
-}
-
-function toggleGiftModal() {
-    const giftModal = new bootstrap.Modal(document.getElementById('giftModal'));
-    giftModal.toggle();
-}
-
-function addGift() {
+// Add a new gift
+async function addGift() {
     const name = document.getElementById('giftName').value;
     const link = document.getElementById('giftLink').value;
     const image = document.getElementById('giftImageLink').value || 'default-image.jpg';
 
     if (name && link) {
-        const giftList = document.querySelector('.gift-list');
-        const newGiftItem = document.createElement('div');
-        newGiftItem.classList.add('gift-item');
-        newGiftItem.innerHTML = `
-            <div class="gift-content">
-                <a href="${link}" target="_blank">
-                    <img src="${image}" alt="${name}">
-                    <p>${name}</p>
-                </a>
-                <i class="bi bi-square" onclick="toggleComplete(this)"></i>
-            </div>
-        `;
+        const newGift = {
+            nombre: name,
+            url: link,
+            image: image,
+            tachado: false
+        };
 
-        giftList.insertBefore(newGiftItem, giftList.children[2]);
+        try {
+            const response = await fetch(`${API_URL}/AddRegalo`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newGift)
+            });
 
-        document.getElementById('giftName').value = '';
-        document.getElementById('giftLink').value = '';
-        document.getElementById('giftImageLink').value = '';
+            if (response.ok) {
+                document.getElementById('giftName').value = '';
+                document.getElementById('giftLink').value = '';
+                document.getElementById('giftImageLink').value = '';
 
-        const giftModal = bootstrap.Modal.getInstance(document.getElementById('giftModal'));
-        giftModal.hide();
+                const giftModal = bootstrap.Modal.getInstance(document.getElementById('giftModal'));
+                giftModal.hide();
+                
+                fetchGiftList(); // Refresh the gift list
+            } else {
+                alert('Error adding gift.');
+            }
+        } catch (error) {
+            console.error('Error adding gift:', error);
+        }
     } else {
         alert('Por favor complete el nombre y el enlace del regalo.');
     }
 }
+
+// Toggle gift completion
+async function toggleComplete(element, giftId) {
+    try {
+        const response = await fetch(`${API_URL}/ToggleRegaloTachado`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: giftId })
+        });
+
+        if (response.ok) {
+            const gift = await response.json();
+            element.classList.toggle('bi-check-square', gift.tachado);
+            element.classList.toggle('bi-square', !gift.tachado);
+        } else {
+            alert('Error toggling gift.');
+        }
+    } catch (error) {
+        console.error('Error toggling gift:', error);
+    }
+}
+
+// Initialize the gift list on page load
+document.addEventListener('DOMContentLoaded', function () {
+    fetchGiftList();
+});
 
 // Existing code for countdown and map initialization
 const countdown = () => {
@@ -195,5 +182,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initMap();
 });
-
-
