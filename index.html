@@ -156,53 +156,53 @@
 
         const API_URL = 'https://www.vidriera.online/Home';
 
-        // Fetch and display the gift list
-        async function fetchGiftList() {
-            try {
-                const response = await fetch(`${API_URL}/GetRegalos`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (response.ok) {
-                    const giftList = await response.json();
-                    // Sort the gift list first by tachado status, then by nombre in ascending order
-                    giftList.sort((a, b) => a.tachado - b.tachado || a.nombre.localeCompare(b.nombre));
-                    renderGiftList(giftList);
-                } else {
-                    console.error('Failed to fetch gift list:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching gift list:', error);
+// Fetch and display the gift list
+async function fetchGiftList() {
+    try {
+        const response = await fetch(`${API_URL}/GetRegalos`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
             }
+        });
+        if (response.ok) {
+            const giftList = await response.json();
+            // Sort the gift list first by tachado status, then by nombre in ascending order
+            giftList.sort((a, b) => a.tachado - b.tachado || a.nombre.localeCompare(b.nombre));
+            renderGiftList(giftList);
+        } else {
+            console.error('Failed to fetch gift list:', response.statusText);
         }
+    } catch (error) {
+        console.error('Error fetching gift list:', error);
+    }
+}
 
-        // Render the gift list
-        function renderGiftList(giftList) {
-            const giftListContainer = document.getElementById('giftList');
-            giftListContainer.innerHTML = '';
+// Render the gift list
+function renderGiftList(giftList) {
+    const giftListContainer = document.getElementById('giftList');
+    giftListContainer.innerHTML = '';
 
-            giftList.forEach(gift => {
-                const giftItem = document.createElement('div');
-                giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
-                if (gift.tachado) {
-                    giftItem.classList.add('completed');
-                }
-                giftItem.innerHTML = `
-                    <div class="gift-content">
-                        <a href="${gift.url}" target="_blank">
-                            <img src="${gift.image}" alt="${gift.nombre}">
-                            <p>${gift.nombre}</p>
-                        </a>
-                        <i class="bi ${gift.tachado ? 'bi-check-square' : 'bi-square'}" onclick="toggleComplete(this, ${gift.regaloId})"></i>
-                    </div>
-                `;
-                giftListContainer.appendChild(giftItem);
-            });
+    giftList.forEach(gift => {
+        const giftItem = document.createElement('div');
+        giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
+        if (gift.tachado) {
+            giftItem.classList.add('completed');
         }
+        giftItem.innerHTML = `
+            <div class="gift-content">
+                <a href="${gift.url}" target="_blank">
+                    <img src="${gift.image}" alt="${gift.nombre}">
+                    <p>${gift.nombre}</p>
+                </a>
+                <i class="bi ${gift.tachado ? 'bi-check-square' : 'bi-square'}" onclick="toggleComplete(this, ${gift.regaloId})"></i>
+            </div>
+        `;
+        giftListContainer.appendChild(giftItem);
+    });
+}
 
-        function isValidURL(string) {
+function isValidURL(string) {
             try {
                 new URL(string);
                 return true;
@@ -250,87 +250,87 @@
             }
         }
 
-        // Toggle gift completion with animation
-        async function toggleComplete(element, giftId) {
-            try {
-                const response = await fetch(`${API_URL}/ToggleRegaloTachado?id=${giftId}`);
+// Toggle gift completion with animation
+async function toggleComplete(element, giftId) {
+    try {
+        const response = await fetch(`${API_URL}/ToggleRegaloTachado?id=${giftId}`);
 
-                if (response.ok) {
-                    const gift = await response.json();
+        if (response.ok) {
+            const gift = await response.json();
 
-                    // Find the gift item in the DOM
-                    const giftItem = element.closest('.gift-item');
+            // Find the gift item in the DOM
+            const giftItem = element.closest('.gift-item');
 
-                    // Add or remove the completed class to apply the line-through style
-                    giftItem.classList.toggle('completed', gift.tachado);
+            // Add or remove the completed class to apply the line-through style
+            giftItem.classList.toggle('completed', gift.tachado);
 
-                    // Animation to move the item to the end
-                    giftItem.classList.add('moving');
-                    setTimeout(() => {
-                        // Remove the item from the current position
-                        giftItem.classList.add('hidden');
+            // Animation to move the item to the end
+            giftItem.classList.add('moving');
+            setTimeout(() => {
+                // Remove the item from the current position
+                giftItem.classList.add('hidden');
 
-                        // Append the item at the end
-                        const giftListContainer = document.getElementById('giftList');
-                        giftListContainer.appendChild(giftItem);
+                // Append the item at the end
+                const giftListContainer = document.getElementById('giftList');
+                giftListContainer.appendChild(giftItem);
 
-                        // Remove hidden class and moving class after re-adding to the DOM
-                        giftItem.classList.remove('hidden');
-                        giftItem.classList.remove('moving');
-                    }, 500); // Match this duration with CSS animation duration
+                // Remove hidden class and moving class after re-adding to the DOM
+                giftItem.classList.remove('hidden');
+                giftItem.classList.remove('moving');
+            }, 500); // Match this duration with CSS animation duration
 
-                    element.classList.toggle('bi-check-square', gift.tachado);
-                    element.classList.toggle('bi-square', !gift.tachado);
-                } else {
-                    alert('Error toggling gift.');
-                }
-            } catch (error) {
-                console.error('Error toggling gift:', error);
-            }
+            element.classList.toggle('bi-check-square', gift.tachado);
+            element.classList.toggle('bi-square', !gift.tachado);
+        } else {
+            alert('Error toggling gift.');
         }
+    } catch (error) {
+        console.error('Error toggling gift:', error);
+    }
+}
 
-        function toggleGiftModal() {
-            const giftModal = new bootstrap.Modal(document.getElementById('giftModal'));
-            giftModal.show();
-        }
+function toggleGiftModal() {
+    const giftModal = new bootstrap.Modal(document.getElementById('giftModal'));
+    giftModal.show();
+}
 
-        function toggleRSVPModal() {
-            const rsvpModal = new bootstrap.Modal(document.getElementById('RSVPModal'));
-            rsvpModal.show();
-        }
+function toggleRSVPModal() {
+    const rsvpModal = new bootstrap.Modal(document.getElementById('RSVPModal'));
+    rsvpModal.show();
+}
 
 
-        // Initialize the gift list on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchGiftList();
-        });
+// Initialize the gift list on page load
+document.addEventListener('DOMContentLoaded', function () {
+    fetchGiftList();
+});
 
-        // Existing code for countdown and map initialization
-        const countdown = () => {
-            const weddingDate = new Date("December 15, 2024 13:00:00").getTime();
-            const now = new Date().getTime();
-            const difference = weddingDate - now;
+// Existing code for countdown and map initialization
+const countdown = () => {
+    const weddingDate = new Date("December 15, 2024 13:00:00").getTime();
+    const now = new Date().getTime();
+    const difference = weddingDate - now;
 
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("minutes").innerText = minutes;
-            document.getElementById("seconds").innerText = seconds;
+    document.getElementById("days").innerText = days;
+    document.getElementById("hours").innerText = hours;
+    document.getElementById("minutes").innerText = minutes;
+    document.getElementById("seconds").innerText = seconds;
 
-            if (difference < 0) {
-                clearInterval(timer);
-                document.getElementById("countdown").innerHTML = "¡Nos casamos!";
-            }
-        };
+    if (difference < 0) {
+        clearInterval(timer);
+        document.getElementById("countdown").innerHTML = "¡Nos casamos!";
+    }
+};
 
-        const timer = setInterval(countdown, 1000);
-        countdown();
+const timer = setInterval(countdown, 1000);
+countdown();
 
-        document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     function initMap() {
         const location = { lat: -43.02766442261236, lng: -71.47020025449234 };
         const map = new google.maps.Map(document.getElementById("map"), {
