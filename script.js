@@ -115,6 +115,17 @@ async function toggleComplete(element, giftId) {
     }
 }
 
+function toggleGiftModal() {
+    const giftModal = new bootstrap.Modal(document.getElementById('giftModal'));
+    giftModal.show();
+}
+
+function toggleRSVPModal() {
+    const rsvpModal = new bootstrap.Modal(document.getElementById('RSVPModal'));
+    rsvpModal.show();
+}
+
+
 // Initialize the gift list on page load
 document.addEventListener('DOMContentLoaded', function () {
     fetchGiftList();
