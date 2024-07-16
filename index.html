@@ -225,15 +225,16 @@
 
             // Ensure link has a protocol
             link = ensureProtocol(link);
-            
+
             if (name && link && isValidURL(link)) {
                 try {
-                    const response = await fetch(`${API_URL}/AddRegalo?nombre=${encodeURIComponent(name)}&url=${encodeURIComponent(link)}&imageurl=${encodeURIComponent(image)}`, {
-                        method: 'GET',
+                    const response = await fetch(`${API_URL}/AddRegalo`, {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        mode: 'cors' // Ensure CORS mode is enabled
+                        mode: 'cors', // Ensure CORS mode is enabled
+                        body: JSON.stringify({ nombre: name, url: link, imageurl: image })
                     });
 
                     if (response.ok) {
@@ -243,7 +244,7 @@
 
                         const giftModal = bootstrap.Modal.getInstance(document.getElementById('giftModal'));
                         giftModal.hide();
-                        
+
                         fetchGiftList(); // Refresh the gift list
                     } else {
                         alert('Error adding gift.');
@@ -256,11 +257,11 @@
             }
         }
 
-        // Toggle gift completion with animation
+
         async function toggleComplete(element, giftId) {
             try {
                 const response = await fetch(`${API_URL}/ToggleRegaloTachado?id=${giftId}`, {
-                    method: 'GET',
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -300,6 +301,7 @@
                 console.error('Error toggling gift:', error);
             }
         }
+
 
         function toggleGiftModal() {
             const giftModal = new bootstrap.Modal(document.getElementById('giftModal'));
