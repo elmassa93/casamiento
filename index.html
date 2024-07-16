@@ -202,35 +202,44 @@
             });
         }
 
-        // Add a new gift
-        async function addGift() {
-            const name = document.getElementById('giftName').value;
-            const link = document.getElementById('giftLink').value;
-            const image = document.getElementById('giftImageLink').value || 'default-image.jpg';
-
-            if (name && link) {
-                try {
-                    const response = await fetch(`${API_URL}/AddRegalo?nombre=${encodeURIComponent(name)}&url=${encodeURIComponent(link)}&image=${encodeURIComponent(image)}`);
-
-                    if (response.ok) {
-                        document.getElementById('giftName').value = '';
-                        document.getElementById('giftLink').value = '';
-                        document.getElementById('giftImageLink').value = '';
-
-                        const giftModal = bootstrap.Modal.getInstance(document.getElementById('giftModal'));
-                        giftModal.hide();
-                        
-                        fetchGiftList(); // Refresh the gift list
-                    } else {
-                        alert('Error adding gift.');
-                    }
-                } catch (error) {
-                    console.error('Error adding gift:', error);
-                }
-            } else {
-                alert('Por favor complete el nombre y el enlace del regalo.');
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;  
             }
         }
+
+        async function addGift() {
+    const name = document.getElementById('giftName').value;
+    const link = document.getElementById('giftLink').value;
+    const image = document.getElementById('giftImageLink').value || 'default-image.jpg';
+
+    if (name && link && isValidURL(link)) {
+        try {
+            const response = await fetch(`${API_URL}/AddRegalo?nombre=${encodeURIComponent(name)}&url=${encodeURIComponent(link)}&image=${encodeURIComponent(image)}`);
+
+            if (response.ok) {
+                document.getElementById('giftName').value = '';
+                document.getElementById('giftLink').value = '';
+                document.getElementById('giftImageLink').value = '';
+
+                const giftModal = bootstrap.Modal.getInstance(document.getElementById('giftModal'));
+                giftModal.hide();
+                
+                fetchGiftList(); // Refresh the gift list
+            } else {
+                alert('Error adding gift.');
+            }
+        } catch (error) {
+            console.error('Error adding gift:', error);
+        }
+    } else {
+        alert('Por favor complete el nombre y el enlace del regalo con un URL válido.');
+    }
+}
+
 
         // Toggle gift completion with animation
         async function toggleComplete(element, giftId) {
