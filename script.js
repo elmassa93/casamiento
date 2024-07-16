@@ -48,21 +48,8 @@ async function addGift() {
     const image = document.getElementById('giftImageLink').value || 'default-image.jpg';
 
     if (name && link) {
-        const newGift = {
-            nombre: name,
-            url: link,
-            image: image,
-            tachado: false
-        };
-
         try {
-            const response = await fetch(`${API_URL}/AddRegalo`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newGift)
-            });
+            const response = await fetch(`${API_URL}/AddRegalo?nombre=${encodeURIComponent(name)}&url=${encodeURIComponent(link)}&image=${encodeURIComponent(image)}`);
 
             if (response.ok) {
                 document.getElementById('giftName').value = '';
@@ -86,16 +73,8 @@ async function addGift() {
 
 // Toggle gift completion
 async function toggleComplete(element, giftId) {
-    console.log(giftId);
     try {
-        console.log(giftId);
-        const response = await fetch(`${API_URL}/ToggleRegaloTachado`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: giftId })
-        });
+        const response = await fetch(`${API_URL}/ToggleRegaloTachado?id=${giftId}`);
 
         if (response.ok) {
             const gift = await response.json();
@@ -108,6 +87,7 @@ async function toggleComplete(element, giftId) {
         console.error('Error toggling gift:', error);
     }
 }
+
 
 // Initialize the gift list on page load
 document.addEventListener('DOMContentLoaded', function () {
