@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de casamiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZcIaKvH2y31k8OQlTG6gU8hcqtBngU_s"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <!-- Header image, overlay, and text -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="text-container">
+                <h1>Celeste y Nacho</h1>
+                <h2>¡Nos casamos!</h2>
+                <br/><br/><br/><br/><br/>
+                <p class="day"><i class="bi bi-calendar-event mx-3"></i>Domingo 15 de diciembre 2024 <span class="time">13:00 hs</span></p>
+                <br/>
+                <p><i class="bi bi-geo-alt mx-3"></i>Salón de eventos Pañil, Trevelin, Chubut</p>
+                <br/>
+                <p><i class="bi bi-person-fill-check mx-3"></i>Codigo de vestimenta: Elegante sport</p>
+                <br/>
+                <div id="countdown" class="d-flex justify-content-center">
+                    <div><span id="days"></span>d</div>
+                    <div><span id="hours"></span>h</div>
+                    <div><span id="minutes"></span>m</div>
+                    <div><span id="seconds"></span>s</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Section -->
+    <section class="confirmation-section text-center my-4">
+        <button class="btn btn-outline-primary btn-lg" onclick="toggleRSVPModal()">Confirmá tu asistencia</button>
+    </section>
+
+    <!-- Gift list -->
+    <section class="additional-info my-4">
+        <p class="gift-note text-center">No esperamos nada más que tu presencia, pero si deseas obsequiarnos algo,<br/> acá hay te dejamos una lista de cosas que quereremos ó necesitamos. <br/> Si comprás algo, por favor tachalo de la lista a fin de evitar duplicados.</p>
+        <div class="gift-list container">
+            <h3 class="d-flex justify-content-between align-items-center">Lista de regalos<button class="btn btn-outline-secondary" onclick="toggleGiftModal()">Añadir regalo</button></h3>
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/yelmo-aspiradora-robot-as-7070-inteligente-mopa-azul-220v/p/MLA19763587?pdp_filters=price%3A200000-300000#polycard_client=search-nordic&searchVariation=MLA19763587&position=3&search_layout=stack&type=product&tracking_id=ea0dadec-4741-425d-9919-a78263119809&wid=MLA1435130597&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_718837-MLA50773798086_072022-O.webp" alt="Yelmo aspiradora robot As-7070 Inteligente mopa azul 220v">
+                            <p>Yelmo aspiradora robot As-7070 Inteligente mopa azul 220v</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/acolchado-edredon-simil-peluche-suave-invierno-king-size-color-verde-diseno-de-la-tela-liso/p/MLA37653067#polycard_client=search-nordic&searchVariation=MLA37653067&position=5&search_layout=grid&type=product&tracking_id=00834250-dd99-40bd-9470-5e3af24ed4a1&wid=MLA1808891862&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_954013-MLU76724713234_062024-F.webp" alt="Acolchado Edredón Símil Peluche Suave Invierno King Size Color Verde Diseño De La Tela Liso">
+                            <p>Acolchado Edredón Símil Peluche Suave Invierno King Size Color Verde Diseño De La Tela Liso</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/cafetera-nespresso-essenza-mini-d-color-negro/p/MLA15261982#polycard_client=search-nordic&searchVariation=MLA15261982&position=3&search_layout=stack&type=product&tracking_id=a7fa1cb8-b3ed-48e0-b2f7-3763616233f9&wid=MLA869483236&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_731398-MLU76145559194_052024-O.webp" alt="Cafetera Nespresso Essenza Mini D Color Negro">
+                            <p>Cafetera Nespresso Essenza Mini D Color Negro</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/hidrolavadora-lusqtoff-hl-120-1200w-7mpa-de-presion-220v-50hz/p/MLA13121234#polycard_client=search-nordic&searchVariation=MLA13121234&position=2&search_layout=grid&type=product&tracking_id=c22cfa92-b361-416a-8bcb-8bec1b9c2cdd&wid=MLA1421271111&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_992182-MLU77509334179_072024-O.webp" alt="Hidrolavadora Lusqtoff HL-120 1200W 7mpa de presión 220V - 50Hz">
+                            <p>Hidrolavadora Lusqtoff HL-120 1200W 7mpa de presión 220V - 50Hz</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/set-24-cubiertos-asado-jumbo-tramontina-dynamic/p/MLA34376590#polycard_client=search-nordic&searchVariation=MLA34376590&position=3&search_layout=grid&type=product&tracking_id=bbd443bc-f615-4070-a51d-f47cac8068d4&wid=MLA1420985243&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_920536-MLU75692649320_042024-O.webp" alt="Set 24 Cubiertos Asado Jumbo Tramontina Dynamic">
+                            <p>Set 24 Cubiertos Asado Jumbo Tramontina Dynamic</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/plato-postre-x6-verbano-linea-recta-19cm-hogar-restaurant-color-blanco-liso/p/MLA27171141#polycard_client=search-nordic&searchVariation=MLA27171141&position=3&search_layout=grid&type=product&tracking_id=988cf9fa-6392-4894-907f-41cad404e063&wid=MLA1526007670&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_668420-MLU71832564747_092023-O.webp" alt="Plato Postre X6 Verbano Linea Recta 19cm Hogar Restaurant Color Blanco Liso">
+                            <p>Plato Postre X6 Verbano Linea Recta 19cm Hogar Restaurant Color Blanco Liso</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-1401213448-set-molinillos-de-madera-hudson-negro-y-gris-15-cm-_JM#is_advertising=true&position=10&search_layout=stack&type=pad&tracking_id=7948b3b3-c29b-4a3c-bb48-e5618590bcbb&is_advertising=true&ad_domain=VQCATCORE_LST&ad_position=10&ad_click_id=OWQ3YjE0YTQtY2Y3MS00NGU3LWFiYTAtZTRjZWY3NWViZWZi" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_703121-MLA54983321851_052023-O.webp" alt="Set Molinillos De Madera Hudson Negro Y Gris 15 Cm">
+                            <p>Set Molinillos De Madera Hudson Negro Y Gris 15 Cm</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-1136381082-rollers-patines-gadnic-3-ruedas-100-mm-freestyle-extensibles-_JM?searchVariation=variationID#polycard_client=search-nordic&searchVariation=183062677493&position=20&search_layout=stack&type=item&tracking_id=572c2a81-e121-4e1b-97ba-bc34548dda55" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_882320-MLA76660567652_062024-O.webp" alt="Rollers Patines Gadnic 3 Ruedas 100 Mm Freestyle Extensibles">
+                            <p>Rollers Patines Gadnic 3 Ruedas 100 Mm Freestyle Extensibles</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/tetera-de-vidrio-750ml-infusor-filtro-de-acero-inoxidable/p/MLA26783690#polycard_client=search-nordic&searchVariation=MLA26783690&position=6&search_layout=grid&type=product&tracking_id=5f5862a1-ea70-4061-8a1b-d91a72fc7a8f&wid=MLA1386521181&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_658496-MLU72700630601_112023-O.webp" alt="Tetera De Vidrio 750ml Infusor Filtro De Acero Inoxidable">
+                            <p>Tetera De Vidrio 750ml Infusor Filtro De Acero Inoxidable</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://www.mercadolibre.com.ar/paleta-padel-quick-paddle-fibra-doble-capa-carbono-flex-cke/p/MLA21234363#polycard_client=search-nordic&searchVariation=MLA21234363&position=13&search_layout=stack&type=product&tracking_id=3d4b1c94-f386-4b25-a61a-e7334b32a1bb&wid=MLA1439020140&sid=search" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_699264-MLA44001661532_112020-O.webp" alt="Paleta Padel Quick Paddle Fibra Doble Capa Carbono Flex Cke">
+                            <p>Paleta Padel Quick Paddle Fibra Doble Capa Carbono Flex Cke</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-1367232939-mortero-de-acero-inoxidable-molcajete-machacador-cocina-_JM#polycard_client=search-nordic&position=14&search_layout=stack&type=item&tracking_id=504d7955-f4c4-42c4-b376-b9caf0846ca1" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_684718-MLA69674760000_052023-O.webp" alt="Mortero De Acero Inoxidable Molcajete Machacador Cocina">
+                            <p>Mortero De Acero Inoxidable Molcajete Machacador Cocina</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-1122532913-panera-frutera-redonda-chica-bambu-cubre-moscas-deconamor-_JM#polycard_client=search-nordic&position=7&search_layout=stack&type=item&tracking_id=bd3a5d5c-7c79-41d8-9a48-6db1722575df" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_736140-MLA76420777166_052024-O.webp" alt="Panera Frutera Redonda Chica Bambu Cubre Moscas Deconamor">
+                            <p>Panera Frutera Redonda Chica Bambu Cubre Moscas Deconamor</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-904281306-alfombra-vintage-tipo-persa-gris-100x150-cm-kreatex-_JM#polycard_client=search-nordic&position=23&search_layout=stack&type=item&tracking_id=11bb96eb-fdea-4d4e-abc8-eafad131da30" target="_blank">
+                            <img src="https://http2.mlstatic.com/D_NQ_NP_909357-MLA52026196524_102022-O.webp" alt="Alfombra Vintage Tipo Persa Gris 100x150 Cm Kreatex">
+                            <p>Alfombra Vintage Tipo Persa Gris 100x150 Cm Kreatex</p>
+                        </a>
+                        <i class="bi bi-square" onclick="toggleComplete(this)"></i>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 gift-item">
+                    <div class="gift-content">
+                        <a href="https://articulo.mercadolibre.com.ar/MLA-904281306-alfombra-vintage-tipo-persa-gris-100x150-cm-kreatex-_JM#polycard_client=search-nordic&position=23&search_layout=stack&type=item&tracking_id=11bb96eb-fdea-4d4e-abc8-eafad131da30" target="_blank">
+                            <img src="https://media.ambito.com/p/48315c5ae0705df97b731e6159f1a6d0/adjuntos/239/imagenes/039/760/0039760744/dolar-dolar-2022-dolares-pesos-billetes.jpg" alt="Billetes pesos y dolares">
+                            <p>Dinero (será transferido a los novios el día del casamiento) - CBU ABC1234567890</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <br/><br/>
+
+
+    <div id="placeDetails">
+        <section class="info-section mt-4">
+            <div class="map-container" id="map"></div>
+        </section>
+
+        <br/>
+
+        <!-- Things to do in Trevelin Section -->
+        <section class="things-to-do-section text-center">
+            <h5 class="m-0">
+                <a class="collapsed" data-bs-toggle="collapse" href="#thingsToDoCollapse" role="button" aria-expanded="false" aria-controls="thingsToDoCollapse" style="text-decoration: none; color: white; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); ">
+                    ¿Querés saber qué hay para hacer en Trevelin y sus alrededores?
+                </a>
+            </h5>
+            <div class="container collapse" id="thingsToDoCollapse">
+                <iframe src="https://trevelin.tur.ar/" width="100%" height="600" frameborder="0" allowfullscreen style="max-width: 1200px; margin: auto;"></iframe>
+            </div>
+        </section>
+    
+        <br/>
+
+        <!-- Places to Stay in Trevelin Section -->
+        <section class="places-to-stay-section text-center">
+            <h5 class="mb-4">
+                <p style="color: white; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); font-size: 1em; margin-top: 2em;">
+                    ¿Buscás un lugar para quedarte?
+                </p>
+            </h5>
+            <div class="container">
+                <p class="mb-0">
+                    <a href="https://www.airbnb.com/s/Trevelin--Chubut--Argentina/homes?checkin=2024-12-14&checkout=2024-12-16" target="_blank" class="btn btn-outline-primary mx-2 text-white">Airbnb</a>
+                    <a href="https://www.booking.com/searchresults.html?ss=Trevelin%2C+Chubut%2C+Argentina&checkin_year=2024&checkin_month=12&checkin_monthday=14&checkout_year=2024&checkout_month=12&checkout_monthday=16" target="_blank" class="btn btn-outline-primary mx-2 text-white">Booking</a>
+                </p>
+            </div>
+        </section>    
+
+        <!-- Footer -->
+        <footer class="text-white text-center mt-5">
+            <p class="mb-0">© 2024 Todos los derechos reservados &nbsp; &nbsp; ignacio@massacese.com</p>
+        </footer>
+
+    </div>
+
+    <!-- Add gift modal -->
+    <div class="modal fade" id="giftModal" tabindex="-1" aria-labelledby="giftModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="giftModalLabel">Añadir regalo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="gift-form">
+                        <input type="text" id="giftName" class="form-control mb-3" placeholder="Nombre del regalo" required>
+                        <input type="url" id="giftLink" class="form-control mb-3" placeholder="Enlace del regalo" required>
+                        <input type="url" id="giftImageLink" class="form-control mb-3" placeholder="Enlace de la imagen (opcional)">
+                        <div class="text-end">
+                            <button class="btn btn-primary" onclick="addGift()">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RSVP Modal -->
+    <div class="modal fade" id="rsvpModal" tabindex="-1" aria-labelledby="rsvpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rsvpModalLabel">Confirmar asistencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="rsvp-form">
+                        <input type="text" id="rsvpName" class="form-control mb-3" placeholder="Ingresá tu nombre y el de los integrantes de tu grupo" required>
+                        <div class="text-end">
+                            <button class="btn btn-outline-success" onclick="confirmRSVP()">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thank you message -->
+    <div class="modal fade" id="thankYouAlert" tabindex="-1" aria-labelledby="thankYouAlertLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="thankYouAlertLabel">¡Gracias, te esperamos en diciembre!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
