@@ -26,13 +26,12 @@ function renderGiftList(giftList) {
     giftListContainer.innerHTML = '';
 
     giftList.forEach(gift => {
-        console.log(gift);
         const giftItem = document.createElement('div');
         giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
         giftItem.innerHTML = `
             <div class="gift-content">
                 <a href="${gift.url}" target="_blank">
-                    <img src="${gift.imageURL}" alt="${gift.nombre}">
+                    <img src="${gift.image}" alt="${gift.nombre}">
                     <p>${gift.nombre}</p>
                 </a>
                 <i class="bi ${gift.tachado ? 'bi-check-square' : 'bi-square'}" onclick="toggleComplete(this, ${gift.regaloId})"></i>
