@@ -1,14 +1,20 @@
 const API_URL = 'https://www.vidriera.online/Home';
 
-
-console.log('here');
-
 // Fetch and display the gift list
 async function fetchGiftList() {
     try {
-        const response = await fetch(`${API_URL}/GetRegalos`);
-        const giftList = await response.json();
-        renderGiftList(giftList);
+        const response = await fetch(`${API_URL}/GetRegalos`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            const giftList = await response.json();
+            renderGiftList(giftList);
+        } else {
+            console.error('Failed to fetch gift list:', response.statusText);
+        }
     } catch (error) {
         console.error('Error fetching gift list:', error);
     }
