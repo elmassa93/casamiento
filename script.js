@@ -71,13 +71,35 @@ async function addGift() {
     }
 }
 
-// Toggle gift completion
+// Toggle gift completion with animation
 async function toggleComplete(element, giftId) {
     try {
         const response = await fetch(`${API_URL}/ToggleRegaloTachado?id=${giftId}`);
 
         if (response.ok) {
             const gift = await response.json();
+
+            // Find the gift item in the DOM
+            const giftItem = element.closest('.gift-item');
+
+            // Add the completed class to apply the line-through style
+            giftItem.classList.toggle('completed', gift.tachado);
+
+            // Animation to move the item to the end
+            giftItem.classList.add('moving');
+            setTimeout(() => {
+                // Remove the item from the current position
+                giftItem.classList.add('hidden');
+
+                // Append the item at the end
+                const giftListContainer = document.getElementById('giftList');
+                giftListContainer.appendChild(giftItem);
+
+                // Remove hidden class and moving class after re-adding to the DOM
+                giftItem.classList.remove('hidden');
+                giftItem.classList.remove('moving');
+            }, 500); // Match this duration with CSS animation duration
+
             element.classList.toggle('bi-check-square', gift.tachado);
             element.classList.toggle('bi-square', !gift.tachado);
         } else {
@@ -87,6 +109,7 @@ async function toggleComplete(element, giftId) {
         console.error('Error toggling gift:', error);
     }
 }
+
 
 
 // Initialize the gift list on page load
