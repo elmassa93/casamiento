@@ -32,7 +32,7 @@ function renderGiftList(giftList) {
         giftItem.innerHTML = `
             <div class="gift-content">
                 <a href="${gift.url}" target="_blank">
-                    <img src="${gift.imageURL || 'default-image.jpg'}" alt="${gift.nombre}">
+                    <img src="${gift.imageURL}" alt="${gift.nombre}">
                     <p>${gift.nombre}</p>
                 </a>
                 <i class="bi ${gift.tachado ? 'bi-check-square' : 'bi-square'}" onclick="toggleComplete(this, ${gift.regaloId})"></i>
