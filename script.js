@@ -11,6 +11,8 @@ async function fetchGiftList() {
         });
         if (response.ok) {
             const giftList = await response.json();
+            // Sort the gift list first by tachado status, then by nombre in ascending order
+            giftList.sort((a, b) => a.tachado - b.tachado || a.nombre.localeCompare(b.nombre));
             renderGiftList(giftList);
         } else {
             console.error('Failed to fetch gift list:', response.statusText);
@@ -28,6 +30,9 @@ function renderGiftList(giftList) {
     giftList.forEach(gift => {
         const giftItem = document.createElement('div');
         giftItem.classList.add('col-12', 'col-md-6', 'col-lg-4', 'gift-item');
+        if (gift.tachado) {
+            giftItem.classList.add('completed');
+        }
         giftItem.innerHTML = `
             <div class="gift-content">
                 <a href="${gift.url}" target="_blank">
@@ -82,7 +87,7 @@ async function toggleComplete(element, giftId) {
             // Find the gift item in the DOM
             const giftItem = element.closest('.gift-item');
 
-            // Add the completed class to apply the line-through style
+            // Add or remove the completed class to apply the line-through style
             giftItem.classList.toggle('completed', gift.tachado);
 
             // Animation to move the item to the end
@@ -109,8 +114,6 @@ async function toggleComplete(element, giftId) {
         console.error('Error toggling gift:', error);
     }
 }
-
-
 
 // Initialize the gift list on page load
 document.addEventListener('DOMContentLoaded', function () {
